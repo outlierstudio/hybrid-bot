@@ -556,8 +556,9 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
     animation: hatch-rise 420ms ease-out both;
   }
 
+  /* HYBRID: finite: no continuously repainting animations. */
   .partner-looking .partner-eyes {
-    animation: partner-look 1.6s ease-in-out infinite;
+    animation: partner-look 1.6s ease-in-out 2;
   }
 
   /* HYBRID: face motion. Transforms only; PartnerFace adds these classes. */
@@ -575,6 +576,16 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
     transform: scaleY(0.1);
   }
 
+  /* HYBRID: a turn header pops once when the turn appears; its status crossfades (opacity). */
+  .hybrid-turn-pop {
+    transform-origin: 0% 50%;
+    animation: presence-pop 280ms cubic-bezier(0.22, 1, 0.36, 1) 1 both;
+  }
+
+  .hybrid-turn-status {
+    animation: hybrid-turn-fade 150ms ease-out 1 both;
+  }
+
   /* HYBRID: the presence pill pops out of the face: eased scale + fade, from below. */
   .presence-bubble {
     transform-origin: 50% 100%;
@@ -587,7 +598,7 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
   }
 
   .partner-dot {
-    animation: partner-dot 1.05s ease-in-out infinite;
+    animation: partner-dot 1.05s ease-in-out 1;
   }
 
   .partner-dot:nth-child(2) {
@@ -653,7 +664,7 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
 
 @media (prefers-reduced-motion: no-preference) {
   .partner-project span {
-    animation: partner-project 900ms ease-in-out infinite;
+    animation: partner-project 900ms ease-in-out 2;
   }
 
   .partner-project span:nth-child(2) {
@@ -2443,5 +2454,14 @@ code {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hybrid-turn-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

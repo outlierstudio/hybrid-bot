@@ -181,9 +181,9 @@ import {
 import { MessageCopyButton } from "./MessageCopyButton";
 import { PierreEntryIcon } from "./PierreEntryIcon";
 import { BotBadge } from "../../bots/BotBadge"; // HYBRID
-import { BotWorkingStatus } from "../../bots/BotWorkingStatus"; // HYBRID
-import { TimelinePresenceBubble } from "../../bots/PresenceBubble"; // HYBRID
-import { latestAssistantMessageRowId } from "./MessagesTimeline.logic"; // HYBRID
+import { usePartnerPresence } from "../../bots/PresenceBubble"; // HYBRID
+import { HybridTurnHeader, turnHeaderModel } from "../../bots/HybridTurnHeader"; // HYBRID
+import { latestTurnHeaderRowId } from "./MessagesTimeline.logic"; // HYBRID
 import { APP_BASE_NAME } from "../../branding"; // HYBRID
 import { inferEntryKindFromPath } from "../../pierre-icons";
 import { AssistantSelectionToolbar } from "./AssistantSelectionToolbar";
@@ -881,7 +881,7 @@ export const MessagesTimeline = memo(function MessagesTimeline({
   ]);
   const rows = useStableRows(rawRows, listIdentityKey);
   // HYBRID: the presence pill rides above Hybrid's newest (or in-progress) message.
-  const latestAssistantRowId = useMemo(() => latestAssistantMessageRowId(rows), [rows]);
+  const latestAssistantRowId = useMemo(() => latestTurnHeaderRowId(rows), [rows]);
   const minimapItems = useMemo(() => deriveTimelineMinimapItems(rows), [rows]);
   const restoreRowIndex =
     restoringThreadPosition && rememberedPosition?.atEnd === false
@@ -2497,24 +2497,23 @@ function TurnFoldTimelineRow({ row }: { row: Extract<TimelineRow, { kind: "turn-
 
 function AssistantTimelineRow({ row }: { row: Extract<TimelineRow, { kind: "message" }> }) {
   const ctx = use(TimelineRowCtx);
+  const latestHeaderRowId = use(LatestAssistantRowCtx); // HYBRID
+  const presence = usePartnerPresence(); // HYBRID
   const messageText = row.message.text || (row.message.streaming ? "" : "(empty response)");
 
   return (
     <>
       <div className="relative min-w-0 px-1 py-0.5">
         {row.botSnapshot ? null : <MessageAuthorHeading>{APP_BASE_NAME}</MessageAuthorHeading>}
-        {/* HYBRID: live status, in place, above the newest Hybrid message. */}
-        {row.botSnapshot && use(LatestAssistantRowCtx) === row.id ? (
-          <TimelinePresenceBubble />
-        ) : null}
+        {/* HYBRID: one turn header, identical to the thinking row's; the status lives in it. */}
         {row.showBotIdentity && row.botSnapshot ? (
-          <BotBadge
+          <HybridTurnHeader
             snapshot={row.botSnapshot}
-            side="assistant"
-            {...(row.message.streaming && messageText.trim().length === 0 ? { working: true } : {})}
-            {...(row.message.streaming && messageText.trim().length === 0 && row.beats
-              ? { beats: row.beats }
-              : {})}
+            model={turnHeaderModel({
+              phase: row.message.streaming ? "streaming" : "completed",
+              isLatest: latestHeaderRowId === row.id,
+              presence,
+            })}
           />
         ) : null}
         <AssistantCitationSource
@@ -2865,12 +2864,23 @@ function ActivityGroupTimelineRow({
 
 function ThinkingTimelineRow({ row }: { row: Extract<TimelineRow, { kind: "thinking" }> }) {
   const { isCompacting, isPreparingWorktree } = use(TimelineRowActivityCtx);
+  const presence = usePartnerPresence(); // HYBRID
+  // HYBRID: Hybrid's turn starts with the same header the reply row will show, in the same
+  // wrapper, so the handoff from thinking to streaming is invisible.
+  if (row.botSnapshot && !isPreparingWorktree && !isCompacting) {
+    return (
+      <div className="relative min-w-0 px-1 py-0.5">
+        <HybridTurnHeader
+          snapshot={row.botSnapshot}
+          model={turnHeaderModel({ phase: "thinking", isLatest: true, presence })}
+        />
+      </div>
+    );
+  }
   // Reserve the activity row during setup so the handoff keeps the same height.
   return (
     <div className="min-h-7">
-      {isPreparingWorktree || isCompacting ? null : row.botSnapshot ? (
-        <BotWorkingStatus snapshot={row.botSnapshot} beats={row.beats ?? []} />
-      ) : (
+      {isPreparingWorktree || isCompacting || row.botSnapshot ? null : (
         <LiveActivityRow label="Thinking" iconName="brain" active shimmer />
       )}
     </div>

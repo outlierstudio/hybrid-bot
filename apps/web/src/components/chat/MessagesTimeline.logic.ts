@@ -2002,19 +2002,26 @@ function isRowUnchanged(a: MessagesTimelineRow, b: MessagesTimelineRow): boolean
 }
 
 /**
- * HYBRID: the row id of the newest assistant message, where Hybrid's presence pill sits.
- * `null` when the timeline has no assistant message yet.
+ * HYBRID: the newest row that shows a Hybrid turn header (the thinking row, or an assistant
+ * message that opens a bot turn). Its header carries the live status; older headers keep an
+ * empty, same-height slot. `null` when there is none.
  */
-export function latestAssistantMessageRowId(
+export function latestTurnHeaderRowId(
   rows: ReadonlyArray<{
     readonly kind: string;
     readonly id: string;
+    readonly botSnapshot?: unknown;
+    readonly showBotIdentity?: boolean;
     readonly message?: { readonly role?: string };
   }>,
 ): string | null {
   for (let index = rows.length - 1; index >= 0; index -= 1) {
     const row = rows[index]!;
-    if (row.kind === "message" && row.message?.role === "assistant") return row.id;
+    if (row.botSnapshot === undefined) continue;
+    if (row.kind === "thinking") return row.id;
+    if (row.kind === "message" && row.message?.role === "assistant" && row.showBotIdentity) {
+      return row.id;
+    }
   }
   return null;
 }
