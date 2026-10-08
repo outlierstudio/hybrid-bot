@@ -48,7 +48,7 @@ const invocation = (
 
 function makeProject(
   repositoryIdentity: OrchestrationProjectShell["repositoryIdentity"] = {
-    canonicalKey: "github.com/preferedev/hybrid",
+    canonicalKey: "github.com/outlierstudio/hybrid-bot",
     locator: {
       source: "git-remote",
       remoteName: "origin",
@@ -107,9 +107,9 @@ function makeLink(
   const { headBranch, baseBranch, ...rest } = overrides;
   return {
     host: "github.com",
-    repository: "preferedev/hybrid",
+    repository: "outlierstudio/hybrid-bot",
     number,
-    url: `https://github.com/preferedev/hybrid/pull/${number}`,
+    url: `https://github.com/outlierstudio/hybrid-bot/pull/${number}`,
     source: "manual",
     linkedAt: "2026-08-10T00:00:00.000Z",
     snapshot:
@@ -308,7 +308,7 @@ describe("pull request toolkit handlers", () => {
       expect(error).toMatchObject({ _tag: "PullRequestTargetIncompleteError" });
       const unknown = yield* harness
         .call("link_pull_request", {
-          url: "https://github.com/preferedev/hybrid/issues/1?token=private-value",
+          url: "https://github.com/outlierstudio/hybrid-bot/issues/1?token=private-value",
         })
         .pipe(Effect.flip);
       expect(unknown).toMatchObject({ _tag: "PullRequestUrlInvalidError" });
@@ -330,7 +330,7 @@ describe("pull request toolkit handlers", () => {
             : null,
       });
       const result = yield* harness.call("link_pull_request", {
-        url: "https://github.com/preferedev/hybrid/pull/123",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/123",
       });
       expect(result.alreadyLinked).toBe(true);
     }),
@@ -349,17 +349,17 @@ describe("pull request toolkit handlers", () => {
             : null,
       });
       const linked = yield* harness.call("unlink_pull_request", {
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 5,
       });
       expect(linked).toEqual({
         host: "github.com",
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 5,
         wasLinked: true,
       });
       const missing = yield* harness.call("unlink_pull_request", {
-        url: "https://github.com/preferedev/hybrid/pull/9",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/9",
       });
       expect(missing.wasLinked).toBe(false);
       expect(yield* Ref.get(harness.commands)).toMatchObject([
@@ -373,7 +373,7 @@ describe("pull request toolkit handlers", () => {
       makeThread([
         makeLink(42, {
           host: "forge.example",
-          url: "http://forge.example:3000/preferedev/hybrid/pulls/42",
+          url: "http://forge.example:3000/outlierstudio/hybrid-bot/pulls/42",
         }),
       ]),
     );
@@ -403,9 +403,9 @@ describe("pull request toolkit handlers", () => {
       expect(result.pullRequests.map((entry) => entry.number)).toEqual([3, 1, 2, 10]);
       expect(result.pullRequests[0]).toEqual({
         host: "github.com",
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 3,
-        url: "https://github.com/preferedev/hybrid/pull/3",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/3",
         source: "agent",
         state: "open",
         title: "PR 3",
@@ -435,7 +435,7 @@ describe("listThreadPullRequests", () => {
       kind: "native" as const,
       id: "stack-1",
       number: 1,
-      url: "https://github.com/preferedev/hybrid/stack/1",
+      url: "https://github.com/outlierstudio/hybrid-bot/stack/1",
       base: "main",
       layers: [
         { number: 1, headBranch: "a", state: "open" as const },

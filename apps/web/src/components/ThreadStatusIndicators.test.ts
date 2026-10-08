@@ -51,7 +51,7 @@ function status(overrides: Partial<VcsStatusResult> = {}): VcsStatusResult {
     pr: {
       number: 42,
       title: "PR branch",
-      url: "https://github.com/preferedev/hybrid/pull/42",
+      url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
       baseRef: "main",
       headRef: "feature/current",
       state: "open",
@@ -67,10 +67,10 @@ function pullRequestSummary(
   return {
     provider: "github",
     projectId: ProjectId.make("project-1"),
-    repository: "preferedev/hybrid",
+    repository: "outlierstudio/hybrid-bot",
     number: 42,
     title: "Feature PR",
-    url: "https://github.com/preferedev/hybrid/pull/42",
+    url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
     state,
     headBranch: "feature/current",
     baseBranch: "main",
@@ -132,7 +132,7 @@ describe("prStatusIndicator", () => {
 });
 
 describe("resolveThreadPullRequestBadgePresentation", () => {
-  const url = "https://github.com/preferedev/hybrid/pull/42";
+  const url = "https://github.com/outlierstudio/hybrid-bot/pull/42";
 
   it("returns the pending pull-request badge when no snapshot is available", () => {
     expect(

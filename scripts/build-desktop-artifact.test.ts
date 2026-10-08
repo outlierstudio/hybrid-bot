@@ -277,6 +277,20 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
     assert.equal(resolveDesktopWebAssetBrand("0.0.17-nightly.20260413.42"), "nightly");
   });
 
+  it.effect("defaults the desktop publish config to the official repo", () =>
+    Effect.gen(function* () {
+      const config = yield* resolveGitHubPublishConfig("latest").pipe(
+        Effect.provide(ConfigProvider.layer(ConfigProvider.fromEnv({ env: {} }))),
+      );
+      assert.deepStrictEqual(config, {
+        provider: "github",
+        owner: "outlierstudio",
+        repo: "hybrid-bot",
+        releaseType: "release",
+      });
+    }),
+  );
+
   it.effect("resolves GitHub desktop publish config from Effect config", () =>
     Effect.gen(function* () {
       const latestConfig = yield* resolveGitHubPublishConfig("latest").pipe(
@@ -284,7 +298,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
           ConfigProvider.layer(
             ConfigProvider.fromEnv({
               env: {
-                T3CODE_DESKTOP_UPDATE_REPOSITORY: "preferedev/hybrid",
+                T3CODE_DESKTOP_UPDATE_REPOSITORY: "outlierstudio/hybrid-bot",
               },
             }),
           ),
@@ -295,7 +309,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
           ConfigProvider.layer(
             ConfigProvider.fromEnv({
               env: {
-                GITHUB_REPOSITORY: "preferedev/hybrid",
+                GITHUB_REPOSITORY: "outlierstudio/hybrid-bot",
               },
             }),
           ),
@@ -304,14 +318,14 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
 
       assert.deepStrictEqual(latestConfig, {
         provider: "github",
-        owner: "preferedev",
-        repo: "hybrid",
+        owner: "outlierstudio",
+        repo: "hybrid-bot",
         releaseType: "release",
       });
       assert.deepStrictEqual(nightlyConfig, {
         provider: "github",
-        owner: "preferedev",
-        repo: "hybrid",
+        owner: "outlierstudio",
+        repo: "hybrid-bot",
         releaseType: "prerelease",
         channel: "nightly",
       });
@@ -354,15 +368,15 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
       assert.deepStrictEqual(release.publish, [
         {
           provider: "github",
-          owner: "preferedev",
-          repo: "hybrid",
+          owner: "outlierstudio",
+          repo: "hybrid-bot",
           releaseType: "release",
         },
       ]);
     }).pipe(
       Effect.provide(
         ConfigProvider.layer(
-          ConfigProvider.fromEnv({ env: { GITHUB_REPOSITORY: "preferedev/hybrid" } }),
+          ConfigProvider.fromEnv({ env: { GITHUB_REPOSITORY: "outlierstudio/hybrid-bot" } }),
         ),
       ),
     ),

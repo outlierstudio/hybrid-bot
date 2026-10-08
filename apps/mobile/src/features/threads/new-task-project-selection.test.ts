@@ -43,7 +43,7 @@ function makeProject(
 
 function makeScope(projects: ReadonlyArray<EnvironmentProject>): HomeProjectScope {
   return {
-    key: "github.com/preferedev/hybrid",
+    key: "github.com/outlierstudio/hybrid-bot",
     title: "Hybrid",
     representative: projects[0]!,
     projects,
@@ -73,11 +73,13 @@ describe("getProjectScopeSelectionTarget", () => {
 describe("resolveEnvironmentProjectMatch", () => {
   it("follows the same repository onto the target machine", () => {
     const selected = makeProject("t3code", "mac", {
-      repositoryKey: "github.com/preferedev/hybrid",
+      repositoryKey: "github.com/outlierstudio/hybrid-bot",
     });
     const target = [
       makeProject("other", "server", { repositoryKey: "github.com/t3tools/other" }),
-      makeProject("t3code-clone", "server", { repositoryKey: "github.com/preferedev/hybrid" }),
+      makeProject("t3code-clone", "server", {
+        repositoryKey: "github.com/outlierstudio/hybrid-bot",
+      }),
     ];
     expect(resolveEnvironmentProjectMatch(target, selected)).toBe(target[1]);
   });
@@ -99,7 +101,7 @@ describe("resolveEnvironmentProjectMatch", () => {
 
   it("does not treat a known different repository as a basename or title match", () => {
     const selected = makeProject("t3code", "mac", {
-      repositoryKey: "github.com/preferedev/hybrid",
+      repositoryKey: "github.com/outlierstudio/hybrid-bot",
       workspaceRoot: "/Users/me/t3code",
     });
     const fork = makeProject("fork", "server", {
@@ -115,7 +117,7 @@ describe("resolveEnvironmentProjectMatch", () => {
 
   it("falls back to the first project on the target so the draft has a key to carry over to", () => {
     const selected = makeProject("t3code", "mac", {
-      repositoryKey: "github.com/preferedev/hybrid",
+      repositoryKey: "github.com/outlierstudio/hybrid-bot",
     });
     const target = [makeProject("unrelated", "server"), makeProject("also-unrelated", "server")];
     expect(resolveEnvironmentProjectMatch(target, selected)).toBe(target[0]);

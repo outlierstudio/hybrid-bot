@@ -324,7 +324,7 @@ describe("composerContextRecords", () => {
       pullRequest: {
         number: 42,
         title: "Improve context chips",
-        url: "https://github.com/preferedev/hybrid/pull/42",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
         headBranch: "feat/context-chips",
         baseBranch: "main",
         state: "open" as const,

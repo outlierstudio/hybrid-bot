@@ -149,10 +149,10 @@ describe("uiStateStore pure functions", () => {
   });
 
   it("stores the sidebar project scope and resets it to all projects", () => {
-    const scoped = setSidebarProjectScopeKey(makeUiState(), "github.com/preferedev/hybrid");
+    const scoped = setSidebarProjectScopeKey(makeUiState(), "github.com/outlierstudio/hybrid-bot");
 
-    expect(scoped.sidebarProjectScopeKey).toBe("github.com/preferedev/hybrid");
-    expect(setSidebarProjectScopeKey(scoped, "github.com/preferedev/hybrid")).toBe(scoped);
+    expect(scoped.sidebarProjectScopeKey).toBe("github.com/outlierstudio/hybrid-bot");
+    expect(setSidebarProjectScopeKey(scoped, "github.com/outlierstudio/hybrid-bot")).toBe(scoped);
     expect(setSidebarProjectScopeKey(scoped, null).sidebarProjectScopeKey).toBeNull();
     expect(setSidebarProjectScopeKey(scoped, "").sidebarProjectScopeKey).toBeNull();
   });
@@ -339,14 +339,14 @@ describe("uiStateStore persistence", () => {
   });
 
   it("restores the sidebar project scope across reloads", () => {
-    persistState(makeUiState({ sidebarProjectScopeKey: "github.com/preferedev/hybrid" }));
+    persistState(makeUiState({ sidebarProjectScopeKey: "github.com/outlierstudio/hybrid-bot" }));
 
     const persisted = JSON.parse(
       localStorageStub.getItem(PERSISTED_STATE_KEY) ?? "{}",
     ) as PersistedUiState;
 
     expect(parsePersistedState(persisted).sidebarProjectScopeKey).toBe(
-      "github.com/preferedev/hybrid",
+      "github.com/outlierstudio/hybrid-bot",
     );
   });
 

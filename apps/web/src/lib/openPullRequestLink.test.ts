@@ -135,20 +135,20 @@ describe("pullRequestCandidateUrlFromReferenceAutolink", () => {
   it("turns GitHub's shared issue route into a pull request candidate", () => {
     expect(
       pullRequestCandidateUrlFromReferenceAutolink(
-        "https://github.com/preferedev/hybrid/issues/8600#issuecomment-1",
+        "https://github.com/outlierstudio/hybrid-bot/issues/8600#issuecomment-1",
       ),
-    ).toBe("https://github.com/preferedev/hybrid/pull/8600#issuecomment-1");
+    ).toBe("https://github.com/outlierstudio/hybrid-bot/pull/8600#issuecomment-1");
   });
 
   it("does not reinterpret other issue hosts or malformed references", () => {
     expect(
       pullRequestCandidateUrlFromReferenceAutolink(
-        "https://gitlab.com/preferedev/hybrid/-/issues/8600",
+        "https://gitlab.com/outlierstudio/hybrid-bot/-/issues/8600",
       ),
     ).toBeNull();
     expect(
       pullRequestCandidateUrlFromReferenceAutolink(
-        "https://github.com/preferedev/hybrid/issues/not-a-number",
+        "https://github.com/outlierstudio/hybrid-bot/issues/not-a-number",
       ),
     ).toBeNull();
   });
@@ -157,16 +157,16 @@ describe("pullRequestCandidateUrlFromReferenceAutolink", () => {
 describe("matchesLinkedPullRequestUrl", () => {
   const linkedPullRequest = {
     projectId: ProjectId.make("project-1"),
-    repository: "preferedev/hybrid",
+    repository: "outlierstudio/hybrid-bot",
     number: 42,
-    url: "https://github.com/preferedev/hybrid/pull/42",
+    url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
   };
 
   it("matches the same pull request without looking up its project", () => {
     expect(
       matchesLinkedPullRequestUrl(
         linkedPullRequest,
-        "https://github.com/PreferEDev/Hybrid/pull/42/files",
+        "https://github.com/OutlierStudio/Hybrid-Bot/pull/42/files",
       ),
     ).toBe(true);
   });
@@ -188,7 +188,7 @@ describe("matchesLinkedPullRequestUrl", () => {
     expect(
       matchesLinkedPullRequestUrl(
         linkedPullRequest,
-        "https://github.com:8443/preferedev/hybrid/pull/42",
+        "https://github.com:8443/outlierstudio/hybrid-bot/pull/42",
       ),
     ).toBe(true);
   });
@@ -206,13 +206,13 @@ describe("matchesLinkedPullRequestUrl", () => {
     expect(
       matchesLinkedPullRequestUrl(
         linkedPullRequest,
-        "https://github.com/preferedev/hybrid/pull/43",
+        "https://github.com/outlierstudio/hybrid-bot/pull/43",
       ),
     ).toBe(false);
     expect(
       matchesLinkedPullRequestUrl(
         linkedPullRequest,
-        "https://github.example.com/preferedev/hybrid/pull/42",
+        "https://github.example.com/outlierstudio/hybrid-bot/pull/42",
       ),
     ).toBe(false);
   });
@@ -231,9 +231,9 @@ describe("shouldOpenPullRequestExternally", () => {
 
 describe("parseChangeRequestUrl", () => {
   it("reads a GitHub pull request", () => {
-    expect(parseChangeRequestUrl("https://github.com/PreferEDev/Hybrid/pull/123")).toEqual({
+    expect(parseChangeRequestUrl("https://github.com/OutlierStudio/Hybrid-Bot/pull/123")).toEqual({
       host: "github.com",
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 123,
     });
   });
@@ -293,10 +293,10 @@ describe("parseChangeRequestUrl", () => {
 
   it("survives trailing segments, a trailing slash and a query string", () => {
     expect(
-      parseChangeRequestUrl("https://github.com/preferedev/hybrid/pull/123/files?w=1"),
+      parseChangeRequestUrl("https://github.com/outlierstudio/hybrid-bot/pull/123/files?w=1"),
     ).toEqual({
       host: "github.com",
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 123,
     });
     expect(
@@ -305,27 +305,27 @@ describe("parseChangeRequestUrl", () => {
     expect(
       parseChangeRequestUrl("https://bitbucket.org/team/repo/pull-requests/5/commits"),
     ).toEqual({ host: "bitbucket.org", repository: "team/repo", number: 5 });
-    expect(parseChangeRequestUrl("https://github.com/preferedev/hybrid/pull/123/")).toEqual({
+    expect(parseChangeRequestUrl("https://github.com/outlierstudio/hybrid-bot/pull/123/")).toEqual({
       host: "github.com",
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 123,
     });
   });
 
   it("claims nothing it cannot be sure of, so the link goes to the browser", () => {
     for (const link of [
-      "https://github.com/preferedev/hybrid/issues/123",
-      "https://github.com/preferedev/hybrid/commit/0a1b2c3",
-      "https://github.com/preferedev/hybrid",
-      "https://github.com/preferedev/hybrid/pull/abc",
-      "https://gitlab.com/preferedev/hybrid/-/snippets/12",
-      "https://gitlab.com/preferedev/hybrid/-/issues/12",
+      "https://github.com/outlierstudio/hybrid-bot/issues/123",
+      "https://github.com/outlierstudio/hybrid-bot/commit/0a1b2c3",
+      "https://github.com/outlierstudio/hybrid-bot",
+      "https://github.com/outlierstudio/hybrid-bot/pull/abc",
+      "https://gitlab.com/outlierstudio/hybrid-bot/-/snippets/12",
+      "https://gitlab.com/outlierstudio/hybrid-bot/-/issues/12",
       // A path shape that means nothing off its own host.
       "https://blog.example.test/2026/updates/pull/3",
       // A lookalike is deliberately not fought here: `github.com.evil.test` reads as a GitHub
       // Enterprise install and there is no way to tell it from one. It is `findProjectForChange
       // Request` that refuses it, because no project in the workspace is checked out from it.
-      "javascript:alert(1)//github.com/preferedev/hybrid/pull/1",
+      "javascript:alert(1)//github.com/outlierstudio/hybrid-bot/pull/1",
       "not a url",
     ]) {
       expect(parseChangeRequestUrl(link), link).toBeNull();
@@ -467,7 +467,7 @@ describe("findProjectForChangeRequest", () => {
 
   it("matches a nested GitLab group by the whole path below the host", () => {
     // The server identifies a repository by `displayName`, which keeps every group segment; the
-    // two-segment owner/name form would look for `preferedev/hybrid` and find nothing.
+    // two-segment owner/name form would look for `outlierstudio/hybrid-bot` and find nothing.
     const projects = [
       project({
         canonicalKey: "gitlab.com/hybrid/platform/t3code",
@@ -489,7 +489,7 @@ describe("findProjectForChangeRequest", () => {
   it("keeps two hosts apart, so an Enterprise link does not open the public one", () => {
     const projects = [
       project({
-        canonicalKey: "github.com/preferedev/hybrid",
+        canonicalKey: "github.com/outlierstudio/hybrid-bot",
         provider: "github",
         owner: "pingdotgg",
         name: "t3code",
@@ -498,7 +498,7 @@ describe("findProjectForChangeRequest", () => {
     expect(
       findProjectForChangeRequest(projects, {
         host: "github.acme.test",
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
       }),
     ).toBeUndefined();
@@ -533,7 +533,7 @@ describe("findProjectForChangeRequest", () => {
   it("claims nothing for a lookalike host, which is what keeps a link a link", () => {
     const projects = [
       project({
-        canonicalKey: "github.com/preferedev/hybrid",
+        canonicalKey: "github.com/outlierstudio/hybrid-bot",
         provider: "github",
         owner: "pingdotgg",
         name: "t3code",
@@ -542,7 +542,7 @@ describe("findProjectForChangeRequest", () => {
     expect(
       findProjectForChangeRequest(projects, {
         host: "github.com-evil.test",
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
       }),
     ).toBeUndefined();

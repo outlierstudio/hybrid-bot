@@ -14,13 +14,13 @@ import {
 describe("normalizeGitRemoteUrl", () => {
   it("canonicalizes equivalent GitHub remotes across protocol variants", () => {
     expect(normalizeGitRemoteUrl("git@github.com:T3Tools/T3Code.git")).toBe(
-      "github.com/preferedev/hybrid",
+      "github.com/outlierstudio/hybrid-bot",
     );
     expect(normalizeGitRemoteUrl("https://github.com/T3Tools/T3Code.git")).toBe(
-      "github.com/preferedev/hybrid",
+      "github.com/outlierstudio/hybrid-bot",
     );
     expect(normalizeGitRemoteUrl("ssh://git@github.com/T3Tools/T3Code")).toBe(
-      "github.com/preferedev/hybrid",
+      "github.com/outlierstudio/hybrid-bot",
     );
   });
 
@@ -79,7 +79,7 @@ describe("normalizeGitRemoteUrl", () => {
       "ssh.dev.azure.com/v4/hybrid/platform/t3code",
     );
     expect(normalizeGitRemoteUrl("git@ssh.dev.azure.com:v3/T3Tools/T3Code")).toBe(
-      "ssh.dev.azure.com/v3/preferedev/hybrid",
+      "ssh.dev.azure.com/v3/outlierstudio/hybrid-bot",
     );
   });
 });
@@ -92,12 +92,12 @@ describe("parseOriginUrlFromGitConfig", () => {
       '[remote "upstream"]',
       "\turl = https://github.com/other/repo.git",
       '[remote "origin"]',
-      "\turl = git@github.com:preferedev/hybrid.git",
+      "\turl = git@github.com:outlierstudio/hybrid-bot.git",
       "\tfetch = +refs/heads/*:refs/remotes/origin/*",
       '[branch "main"]',
       "\tremote = origin",
     ].join("\n");
-    expect(parseOriginUrlFromGitConfig(config)).toBe("git@github.com:preferedev/hybrid.git");
+    expect(parseOriginUrlFromGitConfig(config)).toBe("git@github.com:outlierstudio/hybrid-bot.git");
   });
 
   it("strips inline comments and quotes from the url value", () => {

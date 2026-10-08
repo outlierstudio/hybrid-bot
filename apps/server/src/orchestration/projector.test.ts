@@ -135,13 +135,13 @@ describe("orchestration projector", () => {
               updatedAt: now,
               deletedAt: null,
               repositoryIdentity: {
-                canonicalKey: "github.com/preferedev/hybrid",
+                canonicalKey: "github.com/outlierstudio/hybrid-bot",
                 provider: "github",
-                displayName: "preferedev/hybrid",
+                displayName: "outlierstudio/hybrid-bot",
                 locator: {
                   source: "git-remote",
                   remoteName: "origin",
-                  remoteUrl: "https://github.com/preferedev/hybrid.git",
+                  remoteUrl: "https://github.com/outlierstudio/hybrid-bot.git",
                 },
               },
             },
@@ -166,14 +166,14 @@ describe("orchestration projector", () => {
       );
       const linkedPullRequest = {
         projectId: "project-1",
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 42,
-        url: "https://github.com/preferedev/hybrid/pull/42",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
       };
       const branchPullRequest = {
         ...linkedPullRequest,
         number: 43,
-        url: "https://github.com/preferedev/hybrid/pull/43",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/43",
       };
       const updates = [
         { payload: { linkedPullRequest, branchPullRequest }, expected: branchPullRequest },

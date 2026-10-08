@@ -929,7 +929,7 @@ it.layer(NodeServices.layer)("AgentSessionScanner", (it) => {
         yield* fileSystem.makeDirectory(path.join(repo, ".git"));
         yield* fileSystem.writeFileString(
           path.join(repo, ".git", "config"),
-          '[core]\n\tbare = false\n[remote "origin"]\n\turl = git@github.com:preferedev/hybrid.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n',
+          '[core]\n\tbare = false\n[remote "origin"]\n\turl = git@github.com:outlierstudio/hybrid-bot.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n',
         );
         yield* fileSystem.writeFileString(
           path.join(worktree, ".git"),
@@ -970,7 +970,10 @@ it.layer(NodeServices.layer)("AgentSessionScanner", (it) => {
           { path: plain, git: null },
           {
             path: repo,
-            git: { remoteKey: "github.com/preferedev/hybrid", repository: "preferedev/hybrid" },
+            git: {
+              remoteKey: "github.com/outlierstudio/hybrid-bot",
+              repository: "outlierstudio/hybrid-bot",
+            },
           },
         ]);
       }),

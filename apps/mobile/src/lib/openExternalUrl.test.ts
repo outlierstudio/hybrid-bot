@@ -22,7 +22,7 @@ describe("tryOpenExternalUrl", () => {
     openURL.mockResolvedValue(undefined);
 
     await expect(
-      tryOpenExternalUrl("https://github.com/preferedev/hybrid", "pull-request"),
+      tryOpenExternalUrl("https://github.com/outlierstudio/hybrid-bot", "pull-request"),
     ).resolves.toBe(true);
   });
 
@@ -33,7 +33,7 @@ describe("tryOpenExternalUrl", () => {
 
     await expect(
       tryOpenExternalUrl(
-        "https://github.com/preferedev/hybrid/pull/1?token=secret",
+        "https://github.com/outlierstudio/hybrid-bot/pull/1?token=secret",
         "pull-request",
       ),
     ).resolves.toBe(false);

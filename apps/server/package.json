@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/preferedev/hybrid",
+    "url": "https://github.com/outlierstudio/hybrid-bot",
     "directory": "apps/server"
   },
   "bin": {

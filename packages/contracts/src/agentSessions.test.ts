@@ -25,7 +25,10 @@ describe("AgentSessionScanResult", () => {
   });
 
   it("preserves reported git identity", () => {
-    const git = { remoteKey: "github.com/preferedev/hybrid", repository: "preferedev/hybrid" };
+    const git = {
+      remoteKey: "github.com/outlierstudio/hybrid-bot",
+      repository: "outlierstudio/hybrid-bot",
+    };
     const result = decodeScanResult({
       candidates: [{ ...candidate, git }],
       scannedAt: "2026-08-22T12:00:00.000Z",

@@ -783,8 +783,8 @@ describe("filterPinnedBrowseEntries", () => {
 it.each([
   "#10839",
   "10839",
-  "preferedev/hybrid#10839",
-  "https://github.com/preferedev/hybrid/pull/10839",
+  "outlierstudio/hybrid-bot#10839",
+  "https://github.com/outlierstudio/hybrid-bot/pull/10839",
 ])("finds linked threads from PR query %s", (query) => {
   const items = buildThreadActionItems({
     threads: [
@@ -793,9 +793,9 @@ it.each([
         pullRequests: [
           {
             host: "github.com",
-            repository: "preferedev/hybrid",
+            repository: "outlierstudio/hybrid-bot",
             number: 10839,
-            url: "https://github.com/preferedev/hybrid/pull/10839",
+            url: "https://github.com/outlierstudio/hybrid-bot/pull/10839",
             source: "manual",
             linkedAt: "2026-09-08T00:00:00Z",
             snapshot: null,

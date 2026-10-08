@@ -452,7 +452,7 @@ See A4. Until the sentinels are removed, `ProviderCommandReactor` must only hono
 
 #### J3 (S2): README is broken by find-and-replace
 
-- "Hybrid is a fork of [Hybrid](https://github.com/preferedev/hybrid)". App store links point to T3's real apps, relabelled. `curl … hybrid.preferedev.xyz/install.sh` and `brew install --cask t3-code` are inconsistent. The `t3` CLI name remains. The feature paragraph describes the old "@handle applies for that turn only" design.
+- "Hybrid is a fork of [Hybrid](https://github.com/outlierstudio/hybrid-bot)". App store links point to T3's real apps, relabelled. `curl … hybrid.preferedev.xyz/install.sh` and `brew install --cask t3-code` are inconsistent. The `t3` CLI name remains. The feature paragraph describes the old "@handle applies for that turn only" design.
 - **Fix:** Rewrite the README by hand: what Hybrid is, "fork of T3 Code" with a link to upstream, how to run from source, and nothing that is not shipped.
 
 #### J4 (S2): Plans describe a different product than the code

@@ -2688,40 +2688,45 @@ it.layer(TestLayer)("GitVcsDriver core integration", (it) => {
         yield* initRepoWithCommit(cwd);
         const driver = yield* GitVcsDriver.GitVcsDriver;
 
-        yield* git(cwd, ["remote", "add", "origin", "https://github.com/preferedev/hybrid.git"]);
+        yield* git(cwd, [
+          "remote",
+          "add",
+          "origin",
+          "https://github.com/outlierstudio/hybrid-bot.git",
+        ]);
 
         const reusedForSsh = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "git@github.com:preferedev/hybrid.git",
+          url: "git@github.com:outlierstudio/hybrid-bot.git",
         });
         assert.equal(reusedForSsh, "origin");
 
         const reusedForSshScheme = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com/preferedev/hybrid",
+          url: "ssh://git@github.com/outlierstudio/hybrid-bot",
         });
         assert.equal(reusedForSshScheme, "origin");
 
         const reusedForBareSshScheme = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://github.com/preferedev/hybrid",
+          url: "ssh://github.com/outlierstudio/hybrid-bot",
         });
         assert.equal(reusedForBareSshScheme, "origin");
 
         const reusedForSshPort = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com:22/preferedev/hybrid",
+          url: "ssh://git@github.com:22/outlierstudio/hybrid-bot",
         });
         assert.equal(reusedForSshPort, "origin");
 
         const reusedForSshWithPort = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com:22/preferedev/hybrid.git",
+          url: "ssh://git@github.com:22/outlierstudio/hybrid-bot.git",
         });
         assert.equal(reusedForSshWithPort, "origin");
 

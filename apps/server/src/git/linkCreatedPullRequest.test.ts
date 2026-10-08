@@ -162,7 +162,7 @@ describe("linkCreatedPullRequest", () => {
         result: prResult({
           status: "created",
           number: 42,
-          url: "https://github.com/preferedev/hybrid/pull/42",
+          url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
         }),
         commandId,
       }).pipe(Effect.provide(makeDependencies(dispatch)));
@@ -173,9 +173,9 @@ describe("linkCreatedPullRequest", () => {
           commandId: "server:pr-created-link:test",
           threadId: THREAD_ID,
           host: "github.com",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
           number: 42,
-          url: "https://github.com/preferedev/hybrid/pull/42",
+          url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
           source: "created",
         },
       ]);
@@ -195,7 +195,7 @@ describe("linkCreatedPullRequest", () => {
         threadId: THREAD_ID,
         result: prResult({
           status: "created",
-          url: "https://github.com/preferedev/hybrid/pull/42",
+          url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
         }),
         commandId,
       }).pipe(Effect.provide(dependencies));
@@ -216,7 +216,7 @@ describe("linkCreatedPullRequest", () => {
       const result = prResult({
         status: "opened_existing",
         number: 7,
-        url: "https://github.com/preferedev/hybrid/pull/7",
+        url: "https://github.com/outlierstudio/hybrid-bot/pull/7",
       });
       yield* linkCreatedPullRequest({ threadId: THREAD_ID, result, commandId }).pipe(
         Effect.provide(makeDependencies(rejecting)),

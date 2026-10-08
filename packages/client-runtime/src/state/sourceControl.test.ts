@@ -35,12 +35,12 @@ const TARGET = new PrimaryConnectionTarget({
 const PUBLISH_RESULT: SourceControlPublishRepositoryResult = {
   repository: {
     provider: "github",
-    nameWithOwner: "preferedev/hybrid",
-    url: "https://github.com/preferedev/hybrid",
-    sshUrl: "git@github.com:preferedev/hybrid.git",
+    nameWithOwner: "outlierstudio/hybrid-bot",
+    url: "https://github.com/outlierstudio/hybrid-bot",
+    sshUrl: "git@github.com:outlierstudio/hybrid-bot.git",
   },
   remoteName: "origin",
-  remoteUrl: "git@github.com:preferedev/hybrid.git",
+  remoteUrl: "git@github.com:outlierstudio/hybrid-bot.git",
   branch: "main",
   upstreamBranch: "origin/main",
   status: "pushed",
@@ -139,7 +139,7 @@ describe("source control environment atoms", () => {
             input: {
               cwd: "/repo",
               provider: "github",
-              repository: "preferedev/hybrid",
+              repository: "outlierstudio/hybrid-bot",
               visibility: "private",
             },
           }),
@@ -155,7 +155,7 @@ describe("source control environment atoms", () => {
             input: {
               cwd: "/repo",
               provider: "github",
-              repository: "preferedev/hybrid",
+              repository: "outlierstudio/hybrid-bot",
               visibility: "private",
             },
           }),

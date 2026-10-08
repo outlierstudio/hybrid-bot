@@ -553,7 +553,7 @@ it.effect("reads nothing from a host with no implementation, but reports it", ()
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "notes", workspaceRoot: "/b" }),
         project({
@@ -580,7 +580,7 @@ it.effect("reads nothing from a host with no implementation, but reports it", ()
 
     const result = yield* service.list({ state: "open" });
 
-    assert.deepStrictEqual(listed, ["preferedev/hybrid"]);
+    assert.deepStrictEqual(listed, ["outlierstudio/hybrid-bot"]);
     assert.strictEqual(result.entries[0]?.provider, "github");
     // The GitLab project is explained rather than quietly missing from the page.
     assert.deepStrictEqual(
@@ -606,7 +606,7 @@ it.effect("asks for a whole page of a host, and for the reader's own size when g
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -636,7 +636,7 @@ it.effect("says where each repository carries on, and from nothing it has run ou
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "web", workspaceRoot: "/b", repository: "acme/web" }),
       ],
@@ -645,7 +645,7 @@ it.effect("says where each repository carries on, and from nothing it has run ou
           listChangeRequests: ({ repository }) =>
             Effect.succeed({
               items: [changeRequest(1, "2026-07-02T00:00:00Z")],
-              truncated: repository === "preferedev/hybrid",
+              truncated: repository === "outlierstudio/hybrid-bot",
               continues: true,
             }),
         }),
@@ -657,7 +657,7 @@ it.effect("says where each repository carries on, and from nothing it has run ou
     // The instant of the oldest row, how many rows have gone, and the row already sent at that
     // instant. The repository that had nothing more is simply not in it.
     assert.deepStrictEqual(result.nextCursors, {
-      "github.com preferedev/hybrid": "2026-07-02T00:00:00Z|1|1",
+      "github.com outlierstudio/hybrid-bot": "2026-07-02T00:00:00Z|1|1",
     });
   }),
 );
@@ -670,7 +670,7 @@ it.effect("offers no continuation for a host that cannot be carried on from", ()
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -738,7 +738,7 @@ it.effect("reads only the repositories it was asked to carry on with", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "web", workspaceRoot: "/b", repository: "acme/web" }),
       ],
@@ -775,7 +775,7 @@ it.effect("keeps a row already sent at the boundary instant from arriving twice"
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -799,7 +799,7 @@ it.effect("keeps a row already sent at the boundary instant from arriving twice"
 
     const result = yield* service.list({
       state: "open",
-      cursors: { "github.com preferedev/hybrid": "2026-07-02T00:00:00Z|1|7" },
+      cursors: { "github.com outlierstudio/hybrid-bot": "2026-07-02T00:00:00Z|1|7" },
     });
 
     assert.deepStrictEqual(
@@ -807,7 +807,7 @@ it.effect("keeps a row already sent at the boundary instant from arriving twice"
       [8, 9],
     );
     assert.deepStrictEqual(result.nextCursors, {
-      "github.com preferedev/hybrid": "2026-07-01T00:00:00Z|3|9",
+      "github.com outlierstudio/hybrid-bot": "2026-07-01T00:00:00Z|3|9",
     });
   }),
 );
@@ -820,7 +820,7 @@ it.effect("keeps the earlier exclusions when a slice ends on the instant it bega
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -840,7 +840,7 @@ it.effect("keeps the earlier exclusions when a slice ends on the instant it bega
 
     const result = yield* service.list({
       state: "open",
-      cursors: { "github.com preferedev/hybrid": "2026-07-02T00:00:00Z|1|6" },
+      cursors: { "github.com outlierstudio/hybrid-bot": "2026-07-02T00:00:00Z|1|6" },
     });
 
     // Eight rows can share one second, so a whole slice inside one is ordinary. The next read
@@ -850,7 +850,7 @@ it.effect("keeps the earlier exclusions when a slice ends on the instant it bega
       [7, 8],
     );
     assert.deepStrictEqual(result.nextCursors, {
-      "github.com preferedev/hybrid": "2026-07-02T00:00:00Z|3|6,7,8",
+      "github.com outlierstudio/hybrid-bot": "2026-07-02T00:00:00Z|3|6,7,8",
     });
   }),
 );
@@ -863,7 +863,7 @@ it.effect("refuses a continuation it did not issue, before asking any host anyth
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -872,7 +872,10 @@ it.effect("refuses a continuation it did not issue, before asking any host anyth
     });
 
     const error = yield* Effect.flip(
-      service.list({ state: "open", cursors: { "github.com preferedev/hybrid": "yesterday" } }),
+      service.list({
+        state: "open",
+        cursors: { "github.com outlierstudio/hybrid-bot": "yesterday" },
+      }),
     );
 
     assert.strictEqual(error._tag, "PullRequestOperationError");
@@ -891,7 +894,7 @@ it.effect("calls a transient viewer failure a failed operation, not a signed-out
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -924,7 +927,7 @@ it.effect("reports an unusable host over a merely failing one", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
@@ -967,7 +970,7 @@ it.effect("lists every host that has an implementation", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
@@ -1020,7 +1023,7 @@ it.effect("narrows the listing to one host when asked", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
@@ -1104,7 +1107,7 @@ it.effect("keeps one host listed when another is not set up", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
@@ -1153,7 +1156,7 @@ it.effect("fails as unavailable only when no host can be read", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -1182,13 +1185,13 @@ it.effect("reads a repository once when several worktrees share it", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
           title: "t3code worktree",
           workspaceRoot: "/b",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -1220,7 +1223,7 @@ it.effect("keeps healthy repositories when one of them cannot be read", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "broken", workspaceRoot: "/b", repository: "pingdotgg/broken" }),
       ],
@@ -1930,7 +1933,7 @@ it.effect("flags a review request for the viewer but not on their own change req
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -1969,7 +1972,7 @@ it.effect("refuses a repository that does not belong to the requested project", 
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [fakeProvider("github")],
@@ -2430,7 +2433,7 @@ it.effect("rejects an empty comment before reaching the host", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [fakeProvider("github", { comment: () => Effect.die("must not be called") })],
@@ -2439,7 +2442,7 @@ it.effect("rejects an empty comment before reaching the host", () =>
     const error = yield* service
       .comment({
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
         body: "   ",
       })
@@ -2512,7 +2515,7 @@ it.effect("refuses line comments on a host that takes only a summary", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2535,7 +2538,7 @@ it.effect("refuses line comments on a host that takes only a summary", () =>
     const error = yield* Effect.flip(
       service.submitReview({
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
         verdict: "comment",
         body: "",
@@ -2558,7 +2561,7 @@ it.effect(
             id: "p1",
             title: "t3code",
             workspaceRoot: "/a",
-            repository: "preferedev/hybrid",
+            repository: "outlierstudio/hybrid-bot",
           }),
         ],
         providers: [
@@ -2572,7 +2575,7 @@ it.effect(
       });
       const reference = {
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
       };
 
@@ -2595,7 +2598,7 @@ it.effect("refuses to resolve a conversation on a host that cannot", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2617,7 +2620,7 @@ it.effect("refuses to resolve a conversation on a host that cannot", () =>
     });
     const reference = {
       projectId: "p1" as ProjectId,
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 1,
     };
 
@@ -2641,7 +2644,7 @@ it.effect("refuses to react on a host with no reactions", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2664,7 +2667,7 @@ it.effect("refuses to react on a host with no reactions", () =>
     const error = yield* Effect.flip(
       service.setReaction({
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
         content: "heart",
         reacted: true,
@@ -2683,7 +2686,7 @@ it.effect("refuses to react on a host whose capabilities omit reactions entirely
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2705,7 +2708,7 @@ it.effect("refuses to react on a host whose capabilities omit reactions entirely
     const error = yield* Effect.flip(
       service.setReaction({
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
         content: "heart",
         reacted: true,
@@ -2729,7 +2732,7 @@ it.effect("passes a reaction through with its subject id on a host that has them
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2748,7 +2751,7 @@ it.effect("passes a reaction through with its subject id on a host that has them
 
     yield* service.setReaction({
       projectId: "p1" as ProjectId,
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 1,
       subjectId: "IC_1",
       content: "heart",
@@ -2805,7 +2808,7 @@ it.effect("refuses an empty reply before it reaches the host", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2816,7 +2819,7 @@ it.effect("refuses an empty reply before it reaches the host", () =>
     const error = yield* Effect.flip(
       service.replyToThread({
         projectId: "p1" as ProjectId,
-        repository: "preferedev/hybrid",
+        repository: "outlierstudio/hybrid-bot",
         number: 1,
         threadId: "t1",
         body: "   ",
@@ -2836,7 +2839,7 @@ it.effect("refuses a merge strategy the host does not offer", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2862,7 +2865,7 @@ it.effect("refuses a merge strategy the host does not offer", () =>
     });
     const reference = {
       projectId: "p1" as ProjectId,
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 1,
     };
 
@@ -2923,7 +2926,7 @@ it.effect("asks every host the reader's search, rather than filtering what came 
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
@@ -2956,7 +2959,7 @@ it.effect("asks for no search when the reader has typed nothing", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -2986,13 +2989,13 @@ it.effect("asks another checkout who is signed in when the first one cannot answ
           id: "p1",
           title: "t3code (stale worktree)",
           workspaceRoot: "/gone",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({
           id: "p2",
           title: "t3code",
           workspaceRoot: "/healthy",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -3881,7 +3884,7 @@ it.effect("reads a host's repositories in one search, and files the rows back un
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "web", workspaceRoot: "/b", repository: "acme/web" }),
         project({
@@ -3903,7 +3906,7 @@ it.effect("reads a host's repositories in one search, and files the rows back un
             return Effect.succeed({
               items: [
                 batchedChangeRequest(1, "acme/web", "2026-07-03T00:00:00Z"),
-                batchedChangeRequest(2, "preferedev/hybrid", "2026-07-02T00:00:00Z"),
+                batchedChangeRequest(2, "outlierstudio/hybrid-bot", "2026-07-02T00:00:00Z"),
               ],
               truncated: false,
             });
@@ -3925,7 +3928,7 @@ it.effect("reads a host's repositories in one search, and files the rows back un
 
     const result = yield* service.list({ state: "open" });
 
-    assert.deepStrictEqual(asked, [["preferedev/hybrid", "acme/web"]]);
+    assert.deepStrictEqual(asked, [["outlierstudio/hybrid-bot", "acme/web"]]);
     assert.deepStrictEqual(separately, ["group/project"]);
     // Ordered by update across every host, and each row under the project whose repository it
     // came from.
@@ -3947,7 +3950,7 @@ it.effect("carries every repository of a slice on from the oldest row in it", ()
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
         project({ id: "p2", title: "web", workspaceRoot: "/b", repository: "acme/web" }),
         project({ id: "p3", title: "docs", workspaceRoot: "/c", repository: "acme/docs" }),
@@ -3958,7 +3961,7 @@ it.effect("carries every repository of a slice on from the oldest row in it", ()
             Effect.succeed({
               items: [
                 batchedChangeRequest(1, "acme/web", "2026-07-03T00:00:00Z"),
-                batchedChangeRequest(2, "preferedev/hybrid", "2026-07-02T00:00:00Z"),
+                batchedChangeRequest(2, "outlierstudio/hybrid-bot", "2026-07-02T00:00:00Z"),
                 batchedChangeRequest(3, "acme/web", "2026-07-02T00:00:00Z"),
               ],
               truncated: true,
@@ -3975,7 +3978,7 @@ it.effect("carries every repository of a slice on from the oldest row in it", ()
     // read on its own, and that read is what says whether it has anything at all.
     assert.isTrue(result.truncated);
     assert.deepStrictEqual(result.nextCursors, {
-      "github.com preferedev/hybrid": "2026-07-02T00:00:00Z|1|2",
+      "github.com outlierstudio/hybrid-bot": "2026-07-02T00:00:00Z|1|2",
       "github.com acme/web": "2026-07-02T00:00:00Z|2|3",
     });
   }),
@@ -5561,7 +5564,7 @@ it.effect("keeps the diff cached across a file being ticked off", () =>
           id: "p1",
           title: "t3code",
           workspaceRoot: "/a",
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
         }),
       ],
       providers: [
@@ -5592,7 +5595,11 @@ it.effect("keeps the diff cached across a file being ticked off", () =>
         }),
       ],
     });
-    const reference = { projectId: "p1" as ProjectId, repository: "preferedev/hybrid", number: 1 };
+    const reference = {
+      projectId: "p1" as ProjectId,
+      repository: "outlierstudio/hybrid-bot",
+      number: 1,
+    };
 
     yield* service.diff(reference);
     yield* service.filesViewed(reference);

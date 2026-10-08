@@ -52,8 +52,8 @@ describe("add project shared logic", () => {
     expect(normalizePastedCloneUrl("imputnet/helium")).toBe(
       "https://github.com/imputnet/helium.git",
     );
-    expect(normalizePastedCloneUrl("  preferedev/hybrid  ")).toBe(
-      "https://github.com/preferedev/hybrid.git",
+    expect(normalizePastedCloneUrl("  outlierstudio/hybrid-bot  ")).toBe(
+      "https://github.com/outlierstudio/hybrid-bot.git",
     );
   });
 

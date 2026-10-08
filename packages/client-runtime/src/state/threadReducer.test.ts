@@ -415,16 +415,16 @@ describe("applyThreadDetailEvent", () => {
       (field) => {
         const linkedPullRequest = {
           projectId: ProjectId.make("project-1"),
-          repository: "preferedev/hybrid",
+          repository: "outlierstudio/hybrid-bot",
           number: 42,
-          url: "https://github.com/preferedev/hybrid/pull/42",
+          url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
         };
         const otherField =
           field === "linkedPullRequest" ? "branchPullRequest" : "linkedPullRequest";
         const otherPullRequest = {
           ...linkedPullRequest,
           number: 43,
-          url: "https://github.com/preferedev/hybrid/pull/43",
+          url: "https://github.com/outlierstudio/hybrid-bot/pull/43",
         };
         const linked = applyThreadDetailEvent(
           { ...baseThread, [otherField]: otherPullRequest },
@@ -474,15 +474,15 @@ describe("applyThreadDetailEvent", () => {
   describe("thread pull request links", () => {
     const link = {
       host: "github.com",
-      repository: "preferedev/hybrid",
+      repository: "outlierstudio/hybrid-bot",
       number: 42,
-      url: "https://github.com/preferedev/hybrid/pull/42",
+      url: "https://github.com/outlierstudio/hybrid-bot/pull/42",
       source: "manual" as const,
       linkedAt: "2026-04-01T05:00:00.000Z",
       snapshot: null,
       stack: null,
     };
-    const key = { host: "github.com", repository: "preferedev/hybrid", number: 42 };
+    const key = { host: "github.com", repository: "outlierstudio/hybrid-bot", number: 42 };
     const linkEvent = (sequence: number) =>
       ({
         ...baseEventFields,

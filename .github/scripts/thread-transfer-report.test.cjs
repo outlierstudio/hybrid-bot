@@ -66,12 +66,12 @@ test("renders baseline, impact, ceiling, and ceiling changes", () => {
     currentRun: {
       sha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       conclusion: "success",
-      url: "https://github.com/preferedev/hybrid/actions/runs/2",
+      url: "https://github.com/outlierstudio/hybrid-bot/actions/runs/2",
     },
     baselineRun: {
       sha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       matchesBase: true,
-      url: "https://github.com/preferedev/hybrid/actions/runs/1",
+      url: "https://github.com/outlierstudio/hybrid-bot/actions/runs/1",
     },
   });
 
@@ -140,7 +140,7 @@ test("resolves a fallback PR with a redacted head repo and exact main baseline",
           workflow_id: 3,
           head_sha: "head-sha",
           head_branch: "feature-branch",
-          head_repository: { full_name: "preferedev/hybrid" },
+          head_repository: { full_name: "outlierstudio/hybrid-bot" },
           conclusion: "success",
           pull_requests: [],
         },
@@ -175,7 +175,7 @@ test("does not guess when a fallback commit belongs to multiple PRs", async () =
           head: {
             sha: "head-sha",
             ref: "feature-branch",
-            repo: { full_name: "preferedev/hybrid" },
+            repo: { full_name: "outlierstudio/hybrid-bot" },
           },
         }));
       },
@@ -198,7 +198,7 @@ test("does not guess when a fallback commit belongs to multiple PRs", async () =
           workflow_id: 3,
           head_sha: "head-sha",
           head_branch: "feature-branch",
-          head_repository: { full_name: "preferedev/hybrid" },
+          head_repository: { full_name: "outlierstudio/hybrid-bot" },
           conclusion: "success",
           pull_requests: [],
         },

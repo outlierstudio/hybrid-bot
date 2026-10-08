@@ -75,11 +75,11 @@ describe("load balancing shared project machines", () => {
   });
 });
 const repositoryIdentity = {
-  canonicalKey: "github.com/preferedev/hybrid",
+  canonicalKey: "github.com/outlierstudio/hybrid-bot",
   locator: {
     source: "git-remote" as const,
     remoteName: "upstream",
-    remoteUrl: "https://github.com/preferedev/hybrid.git",
+    remoteUrl: "https://github.com/outlierstudio/hybrid-bot.git",
   },
   provider: "github",
   owner: "hybrid",
