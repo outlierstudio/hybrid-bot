@@ -44,7 +44,7 @@ conflicts=('t3code-nightly' 't3code')
 options=('!debug' '!strip')
 
 _upstream_version="${pkgver/_nightly./-nightly.}"
-_appimage="T3-Code-${_upstream_version}-x86_64.AppImage"
+_appimage="Hybrid-${_upstream_version}-x86_64.AppImage"
 source=(
   "$_appimage::https://github.com/preferedev/hybrid/releases/download/v${_upstream_version}/$_appimage"
   "${pkgname}-${pkgver}-LICENSE::https://raw.githubusercontent.com/preferedev/hybrid/v${_upstream_version}/LICENSE"

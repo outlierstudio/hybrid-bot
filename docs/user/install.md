@@ -62,7 +62,7 @@ or use a package manager:
 | ------------------ | ---------------------------------- |
 | Windows            | `winget install preferedev.Hybrid` |
 | macOS              | `brew install --cask t3-code`      |
-| Debian, Ubuntu     | `sudo apt install ./T3-Code-*.deb` |
+| Debian, Ubuntu     | `sudo apt install ./Hybrid-*.deb`  |
 | Arch Linux         | `yay -S t3code-bin`                |
 | Arch Linux nightly | `yay -S t3code-nightly-bin`        |
 

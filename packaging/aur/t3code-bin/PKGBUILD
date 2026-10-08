@@ -43,7 +43,7 @@ provides=("t3code=$pkgver")
 conflicts=('t3code')
 options=('!debug' '!strip')
 
-_appimage="T3-Code-${pkgver}-x86_64.AppImage"
+_appimage="Hybrid-${pkgver}-x86_64.AppImage"
 source=(
   "$_appimage::https://github.com/preferedev/hybrid/releases/download/v${pkgver}/$_appimage"
   "${pkgname}-${pkgver}-LICENSE::https://raw.githubusercontent.com/preferedev/hybrid/v${pkgver}/LICENSE"
