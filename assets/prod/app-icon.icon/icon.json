@@ -1,0 +1,41 @@
+{
+  "fill": {
+    "solid": "display-p3:0.89804,0.89804,0.87843,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "eyes.svg",
+          "name": "Eyes",
+          "position": {
+            "scale": 16,
+            "translation-in-points": [0, 0]
+          }
+        },
+        {
+          "glass": false,
+          "image-name": "background.svg",
+          "name": "Face",
+          "position": {
+            "scale": 8.1,
+            "translation-in-points": [0, 0]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.35
+      },
+      "translucency": {
+        "enabled": false,
+        "value": 0
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": ["watchOS"],
+    "squares": "shared"
+  }
+}

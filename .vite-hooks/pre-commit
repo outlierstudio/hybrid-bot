@@ -1,0 +1,6 @@
+vp staged
+(
+  cd apps/server && ./node_modules/.bin/tsc --noEmit
+) && (
+  cd apps/web && ./node_modules/.bin/tsc --noEmit
+)
