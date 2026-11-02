@@ -73,8 +73,26 @@ describe("buildPartnerSessionInstructions", () => {
 
   it("falls back to neutral labels", () => {
     const text = buildPartnerSessionInstructions(bot({ purpose: "" }));
-    expect(text).toContain("the user's associate");
+    expect(text).toContain("an associate on the project");
+    expect(text).not.toMatch(/\w+'s associate/);
     expect(text).toContain('"unknown" (unknown)');
+  });
+
+  it("uses a configured userLabel and skips a name when it is missing or blank", () => {
+    const named = buildPartnerSessionInstructions(bot(), {
+      projectName: "hybrid",
+      cwd: "/tmp/hybrid",
+      userLabel: "Lee",
+    });
+    expect(named).toContain("Lee's associate");
+    const blank = buildPartnerSessionInstructions(bot(), {
+      projectName: "hybrid",
+      cwd: "/tmp/hybrid",
+      userLabel: "   ",
+    });
+    expect(blank).toContain("an associate on the project");
+    expect(blank).not.toContain("Lee's associate");
+    expect(blank).not.toMatch(/,\s+'s associate/);
   });
 
   it("adapts the voice block to tone", () => {
@@ -128,7 +146,7 @@ describe("Hybrid's prompt", () => {
   });
 
   it("is the whole prompt, verbatim", () => {
-    expect(PARTNER_PROMPT_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}\.\d+$/);
+    expect(PARTNER_PROMPT_VERSION).toBe("2026-11-01.1");
     expect(text).toMatchSnapshot();
   });
 

@@ -11,7 +11,7 @@
 import type { Bot } from "@t3tools/contracts";
 
 /** Bump on any wording change; logged with every partner turn so evals and logs line up. */
-export const PARTNER_PROMPT_VERSION = "2026-10-08.2";
+export const PARTNER_PROMPT_VERSION = "2026-11-01.1";
 
 export interface PartnerInstructionsContext {
   readonly projectName?: string | undefined;
@@ -201,7 +201,7 @@ export const buildOutput = (caps: PartnerCapabilitySet, tone: number): string =>
     toneBlock(tone),
     "- Lead with the answer and match the user's length. No filler, no praise.",
     "- Status notes: two sentences at most.",
-    "- Done reports: what changed (files), how it was verified, one next step.",
+    "- Done reports: what changed (files) and how it was verified. Offer a next step only when there is a real choice.",
     "- File paths in backticks. No headings or tables in chat.",
     caps.startDeveloperTask
       ? '- Never mention tools, tasks, threads, harnesses, approvals, or modes. Say "I\'m having it fixed", not "I started a developer task".'
@@ -224,7 +224,13 @@ export const buildExamples = (caps: PartnerCapabilitySet): string => {
     "You: [read the code, propose the plan] Most of the time goes to `useDashboardData.ts` refetching every chart on each filter change. My plan: cache results per filter, load charts lazily, then check load time on the largest dashboard.",
     "",
     "Update: the work completed.",
-    "You: Fixed. The banner sits under the button on small screens (`CookieBanner.tsx`, `CookieBanner.test.tsx`). The new 375px test and the existing suite pass. Want me to commit it?",
+    "You: yep, fixed. The banner was sitting on top of the button.",
+    "",
+    "Update: the work completed.",
+    "You: Done. The banner sits under the button on small screens (`CookieBanner.tsx`, `CookieBanner.test.tsx`). The new 375px test and the existing suite pass.",
+    "",
+    "Update: the work completed.",
+    "You: Fixed. The banner sits under the button (`CookieBanner.tsx`). Should I commit that, or leave it on the branch?",
     "",
     "Update: the work failed.",
     'You: The tests failed: `SidebarSearch.test.tsx` still expects "Foo" to match "foo". The change itself is in `SidebarSearch.tsx`. Should I have the matching fixed, or the test updated?',
@@ -236,12 +242,15 @@ export const buildPartnerSessionInstructions = (
   bot: Pick<Bot, "name" | "handle" | "instructions" | "tone" | "canDelegate">,
   context: PartnerInstructionsContext = {},
 ): string => {
-  const user = context.userLabel?.trim() || "the user";
+  const named = context.userLabel?.trim() || undefined;
+  const user = named ?? "the user";
   const project = context.projectName?.trim() || "unknown";
   const cwd = context.cwd?.trim() || "unknown";
   const caps = context.capabilities ?? partnerCapabilitiesForBot(bot, PARTNER_CAPABILITIES_NOW);
   const identity = [
-    `You are ${bot.name} (@${bot.handle}), ${user}'s associate on the project "${project}" (${cwd}).`,
+    named
+      ? `You are ${bot.name} (@${bot.handle}), ${named}'s associate on the project "${project}" (${cwd}).`
+      : `You are ${bot.name} (@${bot.handle}), an associate on the project "${project}" (${cwd}).`,
     bot.instructions.trim(),
   ].filter((line) => line.length > 0);
   return [
