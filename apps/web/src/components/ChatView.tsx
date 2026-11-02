@@ -24,7 +24,7 @@ import { useBots } from "../bots/useBots"; // HYBRID
 import { derivePendingDeveloperPlans } from "../bots/developerPlan"; // HYBRID
 import { resolveTaskConfirmation } from "../bots/developerPlanCommand"; // HYBRID
 import { derivePendingPartnerDecisions } from "../bots/developerDecision"; // HYBRID
-import { derivePartnerPresence } from "../bots/partnerPresence"; // HYBRID
+import { derivePartnerPresence, partnerToolBeatFromWorkLog } from "../bots/partnerPresence"; // HYBRID
 import { isReadOnlyPartnerlessThread } from "../bots/botFeatures"; // HYBRID
 import { ContinueWithHybridBar } from "../bots/ContinueWithHybridBar"; // HYBRID
 import { PartnerPresenceContext } from "../bots/PresenceBubble"; // HYBRID
@@ -3041,16 +3041,6 @@ export default function ChatView(props: ChatViewProps) {
     parentThreadId: routeThreadRef.threadId,
     enabled: activeServerThread?.partnerBotId != null,
   });
-  // HYBRID: the partner top bar's one live line, from task state and open cards.
-  const partnerPresence = useMemo(
-    () =>
-      derivePartnerPresence({
-        work: developerWork,
-        openDecisionCards: partnerDecisions.length,
-        openPlanCards: developerPlans.length,
-      }),
-    [developerWork, partnerDecisions.length, developerPlans.length],
-  );
   const stopDeveloperTaskCommand = useAtomCommand(stopDeveloperTask, { reportFailure: true });
   const stopDeveloperWork = useCallback(
     (taskId: string) =>
@@ -3081,6 +3071,28 @@ export default function ChatView(props: ChatViewProps) {
     [threadActivities],
   );
   const workLogEntries = useMemo(() => deriveWorkLogEntries(threadActivities), [threadActivities]);
+  // HYBRID: one presence for the header, top bar, and sidebar. Partner tools join here.
+  const partnerPresence = useMemo(
+    () =>
+      derivePartnerPresence({
+        work: developerWork,
+        openDecisionCards: partnerDecisions.length,
+        openPlanCards: developerPlans.length,
+        partnerToolBeat: partnerToolBeatFromWorkLog(
+          workLogEntries,
+          activeRunningTurnId,
+          activeProject?.workspaceRoot,
+        ),
+      }),
+    [
+      developerWork,
+      partnerDecisions.length,
+      developerPlans.length,
+      workLogEntries,
+      activeRunningTurnId,
+      activeProject?.workspaceRoot,
+    ],
+  );
   // Native subagent fold: memoized by activity-list identity, shared by the
   // Agents surface, live strip, and workflow cards. v2Projection is null
   // until orchestration-v2 lands (source precedence lives in the derive).
