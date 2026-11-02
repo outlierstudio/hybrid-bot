@@ -67,7 +67,7 @@ const wakeThreadOf = (milestone: PartnerWakeMilestone): ThreadId | undefined =>
 const defaultAfter = (kind: PartnerWakeKind): string => {
   switch (kind) {
     case "task.completed":
-      return "Tell the user what changed in plain words and offer the next step. Do not repeat this block.";
+      return "Tell the user what changed in plain words. Offer a next step only when there is a real choice. Do not repeat this block.";
     case "task.failed":
     case "task.interrupted":
       return "Tell the user what failed in one or two sentences and propose a next step. Do not repeat this block.";

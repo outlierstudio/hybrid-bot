@@ -54,7 +54,10 @@ describe("formatWakeDigest", () => {
     expect(text).toContain("goal: Fix signup button");
     expect(text).toContain("developer said: Lowered banner z-index");
     expect(text).toContain("files: src/components/CookieBanner.tsx (+6 -2)");
-    expect(text).toContain("Tell the user what changed in plain words");
+    expect(text).toContain(
+      "Tell the user what changed in plain words. Offer a next step only when there is a real choice.",
+    );
+    expect(text).not.toContain("offer the next step");
     expect(text).not.toContain("ask_user");
   });
 
