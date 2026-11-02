@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vite-plus/test";
 
+import { turnHeaderModel } from "./HybridTurnHeader";
 import {
   composerEngineControlMode,
   derivePartnerPresence,
   needsYouFirst,
+  partnerToolBeatFromWorkLog,
   resolveThreadRowState,
   type ThreadRowState,
 } from "./partnerPresence";
@@ -56,6 +58,145 @@ describe("derivePartnerPresence", () => {
     ]) {
       expect(derivePartnerPresence(input)).toEqual({ kind: "waiting", text: "Waiting for you" });
     }
+  });
+
+  it("shows an in-progress partner Read on a running turn", () => {
+    const beat = partnerToolBeatFromWorkLog(
+      [
+        {
+          turnId: "turn-1",
+          tone: "tool",
+          toolLifecycleStatus: "completed",
+          toolTitle: "Read",
+          label: "Read",
+          changedFiles: ["CookieBanner.tsx"],
+        },
+        {
+          turnId: "turn-1",
+          tone: "tool",
+          toolLifecycleStatus: "inProgress",
+          toolTitle: "Read",
+          label: "Read",
+          changedFiles: ["CookieBanner.tsx"],
+        },
+      ],
+      "turn-1",
+      "/repo",
+    );
+    expect(beat).toBe("Reading `CookieBanner.tsx`");
+    const presence = derivePartnerPresence({
+      work: [],
+      openDecisionCards: 0,
+      openPlanCards: 0,
+      partnerToolBeat: beat,
+    });
+    expect(presence).toEqual({ kind: "working", text: "Reading `CookieBanner.tsx`" });
+    expect(turnHeaderModel({ phase: "thinking", isLatest: true, presence }).status).toBe(
+      "Reading `CookieBanner.tsx`",
+    );
+  });
+
+  it("returns null for an aborted in-progress tool once the turn is finished", () => {
+    expect(
+      partnerToolBeatFromWorkLog(
+        [
+          {
+            turnId: "turn-1",
+            tone: "tool",
+            toolLifecycleStatus: "inProgress",
+            toolTitle: "Read",
+            label: "Read",
+            changedFiles: ["CookieBanner.tsx"],
+          },
+        ],
+        null,
+        "/repo",
+      ),
+    ).toBeNull();
+  });
+
+  it("returns null when the in-progress tool belongs to an older turn", () => {
+    expect(
+      partnerToolBeatFromWorkLog(
+        [
+          {
+            turnId: "turn-old",
+            tone: "tool",
+            toolLifecycleStatus: "inProgress",
+            toolTitle: "Read",
+            label: "Read",
+            changedFiles: ["CookieBanner.tsx"],
+          },
+        ],
+        "turn-new",
+        "/repo",
+      ),
+    ).toBeNull();
+  });
+
+  it("reads a path from viewedImagePath when changedFiles is empty", () => {
+    expect(
+      partnerToolBeatFromWorkLog(
+        [
+          {
+            turnId: "turn-1",
+            tone: "tool",
+            toolLifecycleStatus: "inProgress",
+            label: "Read",
+            viewedImagePath: "CookieBanner.tsx",
+          },
+        ],
+        "turn-1",
+        undefined,
+      ),
+    ).toBe("Reading `CookieBanner.tsx`");
+  });
+
+  it("lets a live developer task and a waiting card beat the partner's own tool", () => {
+    const own = "Reading `CookieBanner.tsx`";
+    expect(
+      derivePartnerPresence({
+        work: [{ state: "running", liveStatus: "Editing `App.tsx`" }],
+        openDecisionCards: 0,
+        openPlanCards: 0,
+        partnerToolBeat: own,
+      }).text,
+    ).toBe("Editing `App.tsx`");
+    expect(
+      derivePartnerPresence({
+        work: [],
+        openDecisionCards: 1,
+        openPlanCards: 0,
+        partnerToolBeat: own,
+      }).text,
+    ).toBe("Waiting for you");
+  });
+
+  it("stays Ready when the partner tool is finished", () => {
+    expect(
+      partnerToolBeatFromWorkLog(
+        [
+          {
+            turnId: "turn-1",
+            tone: "tool",
+            toolLifecycleStatus: "completed",
+            toolTitle: "Read",
+            label: "Read",
+            changedFiles: ["CookieBanner.tsx"],
+          },
+        ],
+        "turn-1",
+        undefined,
+      ),
+    ).toBeNull();
+    expect(
+      derivePartnerPresence({
+        work: [],
+        openDecisionCards: 0,
+        openPlanCards: 0,
+        partnerToolBeat: null,
+      }),
+    ).toEqual({ kind: "ready", text: "Ready" });
   });
 });
 
