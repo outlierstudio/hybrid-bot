@@ -954,6 +954,9 @@ describe("ProviderCommandReactor", () => {
     });
     expect(started.partnerInstructions).toEqual(expect.stringContaining("Research"));
     expect(started.partnerInstructions).not.toContain("<harness-order>");
+    // No display-name setting: identity stays nameless (not the OS username).
+    expect(started.partnerInstructions).toContain("an associate on the project");
+    expect(started.partnerInstructions).not.toMatch(/\w+'s associate/);
   });
 
   it("prepends <partner_context> to partner turns and wake-ups, not to the session prompt", async () => {
